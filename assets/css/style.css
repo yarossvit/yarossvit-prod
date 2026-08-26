@@ -1091,48 +1091,6 @@
   width: 90%;
   pointer-events: none;
 }
-
-.cover-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.25);
-  border: none;
-  width: 50px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #fff;
-  transition: background 0.3s, opacity 0.3s;
-}
-.cover-arrow:hover {
-  background: rgba(0, 0, 0, 0.55);
-}
-.cover-arrow.js-slider-prev {
-  left: 15px;
-}
-.cover-arrow.js-slider-next {
-  right: 15px;
-}
-.cover-arrow .arrow {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-top: 2px solid #fff;
-  border-right: 2px solid #fff;
-}
-.cover-arrow .arrow.-left {
-  transform: rotate(-135deg);
-  margin-left: 5px;
-}
-.cover-arrow .arrow.-right {
-  transform: rotate(45deg);
-  margin-right: 5px;
-}
-
 /* 3. Image Containers & Aspect Ratio Preservation */
 .lazy-image {
   position: relative !important;
