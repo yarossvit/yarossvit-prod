@@ -1,3 +1,73 @@
+
+/* ==========================================================================
+   CRITICAL GLOBAL VISIBILITY FIXES
+   ========================================================================== */
+body, body.js-animated {
+  opacity: 1 !important;
+}
+
+body.js-animated .cover,
+body.js-animated .sections-container .sections-container-inner,
+body.js-animated .comment-list > .comment,
+body.js-animated .page-footer > .inner,
+body.js-animated .page-header > .inner,
+.sections-container-inner,
+.cover {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Force all images to be visible, fully opaque, and never collapsed */
+img,
+.lazyload,
+.lazyloading,
+.lazyloaded,
+.lazy-image > img,
+.lazy-image img,
+.piece img,
+.picture-section img {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.lazy-image > .placeholder,
+.lazy-image > canvas {
+  display: none !important;
+}
+
+.lazy-image {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Album piece styles */
+.piece {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.piece .lazy-image {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.piece .lazy-image > img,
+.piece img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* ==========================================================================
    PERFECT PIXEL-PERFECT REPLICA OVERRIDES
    ========================================================================== */

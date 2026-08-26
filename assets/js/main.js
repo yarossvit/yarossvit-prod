@@ -1,3 +1,27 @@
+// Immediate image and animation visibility enforcer
+(function() {
+  if (document.body) document.body.classList.remove('js-animated');
+  function enforce() {
+    if (document.body) document.body.classList.remove('js-animated');
+    document.querySelectorAll('img').forEach(function(img) {
+      img.style.opacity = '1';
+      img.style.visibility = 'visible';
+      var dsrc = img.getAttribute('data-src');
+      if (dsrc && (!img.getAttribute('src') || img.getAttribute('src').indexOf('data:image') === 0)) {
+        img.setAttribute('src', dsrc);
+      }
+    });
+    document.querySelectorAll('.lazy-image').forEach(function(li) {
+      li.classList.add('is-loaded');
+    });
+  }
+  enforce();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enforce);
+  }
+  window.addEventListener('load', enforce);
+})();
+
 /**
  * Володимир Яросвіт — Персональний сайт
  * Vanilla JS Engine (Slider, Lightbox, Mobile Nav, FAQ Accordion, Order Modal, Back to Top, Share)
