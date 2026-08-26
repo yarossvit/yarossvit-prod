@@ -1,3 +1,88 @@
+
+/* ==========================================================================
+   Visibility & Layout Resets (Ensure all content is 100% visible)
+   ========================================================================== */
+.page-header > .inner {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.slides {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.slider .slider-viewport {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 70vh !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+}
+
+.cover.-fullscreen {
+  height: 90vh !important;
+  min-height: 500px !important;
+  position: relative !important;
+}
+
+.cover.-fullscreen .slider,
+.cover.-fullscreen .slider-viewport {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.slider .slide {
+  visibility: visible !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transition: opacity 1s ease-in-out !important;
+}
+
+.slide img,
+.slider .slide img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.lazy-image > img,
+.lazy-image img,
+img.lazyload,
+img.lazyloaded {
+  opacity: 1 !important;
+}
+
+.lazy-image canvas.placeholder {
+  display: none !important;
+}
+
+body.js-animated .page-header > .inner,
+body.js-animated .cover,
+body.js-animated .sections-container:not(.-no-animations) .sections-container-inner,
+body.js-animated .comment-list > .comment,
+body.js-animated .page-footer > .inner {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.sections-container-inner {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Forum&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
 
 /* Base Typography */
