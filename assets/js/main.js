@@ -1,61 +1,57 @@
 /**
  * Володимир Яросвіт — Персональний сайт
- * Vanilla JS Engine (Slider, Lightbox, Mobile Nav, FAQ Accordion, LazyLoad)
+ * Vanilla JS Engine (Slider, Lightbox, Mobile Nav, FAQ Accordion, Order Modal, Back to Top, Share)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initLazyLoad();
+  initLazyImages();
   initMobileMenu();
   initSlider();
   initFAQ();
+  initOrderModal();
+  initFloatingButtons();
   initGalleryLightbox();
   highlightActiveMenu();
 });
 
 /* ==========================================================================
-   1. Lazy Loading for Images
+   1. Image Display & Placeholder Handler
    ========================================================================== */
-function initLazyLoad() {
-  const lazyImages = document.querySelectorAll('img[data-src], img.lazyload');
-  
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          loadImage(entry.target);
-          obs.unobserve(entry.target);
+function initLazyImages() {
+  const lazyImages = document.querySelectorAll('.lazy-image img, img[loading="lazy"]');
+  lazyImages.forEach(img => {
+    // If already complete, hide placeholder
+    if (img.complete && img.naturalWidth > 0) {
+      handleLoaded(img);
+    } else {
+      img.addEventListener('load', () => handleLoaded(img));
+      img.addEventListener('error', () => {
+        // Retry without query params if needed
+        if (img.dataset.src && img.src !== img.dataset.src) {
+          img.src = img.dataset.src;
         }
       });
-    }, { rootMargin: '400px 0px 400px 0px' });
-
-    lazyImages.forEach(img => observer.observe(img));
-  } else {
-    lazyImages.forEach(img => loadImage(img));
-  }
-
-  function loadImage(img) {
-    const src = img.getAttribute('data-src');
-    const srcset = img.getAttribute('data-srcset');
-    if (srcset) {
-      img.srcset = srcset;
     }
-    if (src) {
-      img.src = src;
-    }
-    img.classList.remove('lazyload');
-    img.classList.add('lazyloaded');
-    
-    img.onload = () => {
-      const placeholder = img.parentElement ? img.parentElement.querySelector('canvas.placeholder, canvas.logo-placeholder') : null;
+  });
+
+  function handleLoaded(img) {
+    const parent = img.closest('.lazy-image');
+    if (parent) {
+      parent.classList.add('is-loaded');
+      const placeholder = parent.querySelector('.placeholder');
       if (placeholder) {
-        placeholder.style.display = 'none';
+        placeholder.style.opacity = '0';
+        setTimeout(() => {
+          placeholder.style.display = 'none';
+        }, 300);
       }
-    };
+    }
+    img.style.opacity = '1';
   }
 }
 
 /* ==========================================================================
-   2. Mobile Menu (Drawer)
+   2. Mobile Navigation Menu
    ========================================================================== */
 function initMobileMenu() {
   const header = document.querySelector('.page-header');
@@ -91,14 +87,14 @@ function initMobileMenu() {
 }
 
 /* ==========================================================================
-   3. Fullscreen Hero Slider (Index page)
+   3. Fullscreen Hero Slider
    ========================================================================== */
 function initSlider() {
   const slider = document.querySelector('.slider.js-slider');
   if (!slider) return;
 
   const slides = slider.querySelectorAll('.slide.js-slide');
-  if (slides.length <= 1) return;
+  if (slides.length === 0) return;
 
   let currentIndex = 0;
   const delay = parseInt(slider.getAttribute('data-delay') || '5000', 10);
@@ -110,33 +106,38 @@ function initSlider() {
     slide.style.left = '0';
     slide.style.width = '100%';
     slide.style.height = '100%';
-    slide.style.transition = 'opacity 1.2s ease-in-out';
+    slide.style.transition = 'opacity 1s ease-in-out, visibility 1s ease-in-out';
     slide.style.opacity = idx === 0 ? '1' : '0';
     slide.style.zIndex = idx === 0 ? '2' : '1';
+    slide.style.visibility = idx === 0 ? 'visible' : 'hidden';
     slide.style.pointerEvents = idx === 0 ? 'auto' : 'none';
   });
 
   function showSlide(index) {
     slides[currentIndex].style.opacity = '0';
+    slides[currentIndex].style.visibility = 'hidden';
     slides[currentIndex].style.zIndex = '1';
     slides[currentIndex].style.pointerEvents = 'none';
 
     currentIndex = (index + slides.length) % slides.length;
 
+    slides[currentIndex].style.visibility = 'visible';
     slides[currentIndex].style.opacity = '1';
     slides[currentIndex].style.zIndex = '2';
     slides[currentIndex].style.pointerEvents = 'auto';
 
     const img = slides[currentIndex].querySelector('img');
-    if (img && img.getAttribute('data-src') && (!img.src || !img.src.includes('http'))) {
+    if (img && img.getAttribute('data-src') && (!img.src || img.src.includes('data:image'))) {
       img.src = img.getAttribute('data-src');
-      if (img.getAttribute('data-srcset')) img.srcset = img.getAttribute('data-srcset');
-      img.classList.add('lazyloaded');
     }
   }
 
   function nextSlide() {
     showSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentIndex - 1);
   }
 
   function startAutoplay() {
@@ -148,14 +149,30 @@ function initSlider() {
     if (timer) clearInterval(timer);
   }
 
+  // Prev / Next arrow buttons
+  const prevBtn = document.querySelector('.js-slider-prev');
+  const nextBtn = document.querySelector('.js-slider-next');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+      startAutoplay();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+      startAutoplay();
+    });
+  }
+
   slider.addEventListener('mouseenter', stopAutoplay);
   slider.addEventListener('mouseleave', startAutoplay);
 
-  slider.addEventListener('click', () => {
-    nextSlide();
-    startAutoplay();
-  });
-
+  // Touch Swipe for mobile
   let startX = 0;
   slider.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
@@ -166,11 +183,8 @@ function initSlider() {
     const endX = e.changedTouches[0].clientX;
     const diff = startX - endX;
     if (Math.abs(diff) > 40) {
-      if (diff > 0) {
-        showSlide(currentIndex + 1);
-      } else {
-        showSlide(currentIndex - 1);
-      }
+      if (diff > 0) nextSlide();
+      else prevSlide();
     }
     startAutoplay();
   }, { passive: true });
@@ -179,35 +193,159 @@ function initSlider() {
 }
 
 /* ==========================================================================
-   4. FAQ Accordion
+   4. FAQ Accordion (Answers Expand / Collapse)
    ========================================================================== */
 function initFAQ() {
-  const accordionItems = document.querySelectorAll('.accordion-section .item, .section-container .item');
-  accordionItems.forEach(item => {
-    const header = item.querySelector('.header, h3');
-    const content = item.querySelector('.content');
-    if (!header || !content) return;
+  const questions = document.querySelectorAll('.questions-list-section .question, .js-question');
+  
+  questions.forEach(question => {
+    const title = question.querySelector('.title, .js-question-title');
+    const answer = question.querySelector('.answer, .js-answer');
+    if (!title || !answer) return;
 
-    if (!item.classList.contains('is-open')) {
-      content.style.display = 'none';
-    }
+    // Toggle on click
+    title.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isActive = question.classList.contains('is-active');
 
-    header.style.cursor = 'pointer';
-    header.addEventListener('click', () => {
-      const isOpen = item.classList.contains('is-open');
-      if (isOpen) {
-        item.classList.remove('is-open');
-        content.style.display = 'none';
+      // Optional: Close others
+      questions.forEach(q => {
+        if (q !== question) {
+          q.classList.remove('is-active');
+          const ans = q.querySelector('.answer');
+          if (ans) ans.style.display = 'none';
+        }
+      });
+
+      if (isActive) {
+        question.classList.remove('is-active');
+        answer.style.display = 'none';
       } else {
-        item.classList.add('is-open');
-        content.style.display = 'block';
+        question.classList.add('is-active');
+        answer.style.display = 'block';
+        answer.style.opacity = '1';
       }
     });
   });
 }
 
 /* ==========================================================================
-   5. Fullscreen Lightbox Gallery
+   5. Order Modal ("Замовити фотосесію")
+   ========================================================================== */
+function initOrderModal() {
+  const orderTriggers = document.querySelectorAll('.js-order-trigger, .button.-fill, a[href*="forms/orders"]');
+  if (!orderTriggers.length) return;
+
+  let modal = document.querySelector('.custom-order-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'custom-order-modal';
+    modal.innerHTML = `
+      <div class="custom-order-modal-backdrop"></div>
+      <div class="custom-order-modal-content">
+        <button class="custom-order-modal-close" aria-label="Закрити">&times;</button>
+        <h3 class="custom-order-modal-title">Замовити фотосесію</h3>
+        <p class="custom-order-modal-subtitle">Володимир Яросвіт — весільний та портретний фотограф</p>
+        
+        <div class="custom-order-contacts">
+          <a href="https://www.instagram.com/yarossvit_prod" target="_blank" rel="noopener noreferrer" class="custom-order-btn -instagram">
+            <i class="fab fa-instagram"></i> Написати в Instagram
+          </a>
+          <a href="tel:+380986808278" class="custom-order-btn -phone">
+            <i class="fal fa-phone-alt"></i> +380 98 680 82 78
+          </a>
+          <a href="mailto:yarossvit.prod@gmail.com" class="custom-order-btn -email">
+            <i class="fal fa-envelope"></i> yarossvit.prod@gmail.com
+          </a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  const closeBtn = modal.querySelector('.custom-order-modal-close');
+  const backdrop = modal.querySelector('.custom-order-modal-backdrop');
+
+  function openModal(e) {
+    if (e) e.preventDefault();
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  orderTriggers.forEach(btn => {
+    btn.addEventListener('click', openModal);
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+}
+
+/* ==========================================================================
+   6. Floating Action Buttons (Back to Top & Share)
+   ========================================================================== */
+function initFloatingButtons() {
+  const backToTop = document.querySelector('.js-back-to-top');
+  const shareBtn = document.querySelector('.js-share-trigger');
+
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.add('is-visible');
+      } else {
+        backToTop.classList.remove('is-visible');
+      }
+    }, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        // Copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          showToast('Посилання скопійовано в буфер!');
+        }).catch(() => {
+          showToast(window.location.href);
+        });
+      }
+    });
+  }
+
+  function showToast(msg) {
+    let toast = document.querySelector('.custom-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'custom-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('is-visible');
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 2500);
+  }
+}
+
+/* ==========================================================================
+   7. Fullscreen Lightbox Gallery (Photoswipe equivalent)
    ========================================================================== */
 function initGalleryLightbox() {
   const galleryLinks = document.querySelectorAll('.js-gallery-link');
@@ -328,7 +466,7 @@ function initGalleryLightbox() {
 }
 
 /* ==========================================================================
-   6. Highlight Active Menu Link
+   8. Highlight Active Menu Link
    ========================================================================== */
 function highlightActiveMenu() {
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
