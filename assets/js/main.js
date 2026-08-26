@@ -31,7 +31,7 @@ function initSlider() {
   const totalCountEl = document.querySelector('.js-slider-total-slides');
 
   if (totalCountEl) {
-    totalCountEl.textContent = (slides.length < 10 ? '0' : '') + slides.length;
+    totalCountEl.textContent = slides.length;
   }
 
   slides.forEach((slide, idx) => {
@@ -49,7 +49,7 @@ function initSlider() {
 
   function updateCounter() {
     if (currCountEl) {
-      currCountEl.textContent = (currentIndex + 1 < 10 ? '0' : '') + (currentIndex + 1);
+      currCountEl.textContent = currentIndex + 1;
     }
   }
 
