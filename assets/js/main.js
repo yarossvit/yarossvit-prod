@@ -4,7 +4,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initLazyImages();
   initMobileMenu();
   initSlider();
   initFAQ();
@@ -15,39 +14,125 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. Image Display & Placeholder Handler
+   1. Fullscreen Hero Slider & Slide Counter
    ========================================================================== */
-function initLazyImages() {
-  const lazyImages = document.querySelectorAll('.lazy-image img, img[loading="lazy"]');
-  lazyImages.forEach(img => {
-    // If already complete, hide placeholder
-    if (img.complete && img.naturalWidth > 0) {
-      handleLoaded(img);
-    } else {
-      img.addEventListener('load', () => handleLoaded(img));
-      img.addEventListener('error', () => {
-        // Retry without query params if needed
-        if (img.dataset.src && img.src !== img.dataset.src) {
-          img.src = img.dataset.src;
-        }
-      });
-    }
+function initSlider() {
+  const slider = document.querySelector('.slider.js-slider');
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll('.slide.js-slide');
+  if (slides.length === 0) return;
+
+  let currentIndex = 0;
+  const delay = parseInt(slider.getAttribute('data-delay') || '5000', 10);
+  let timer = null;
+
+  const currCountEl = document.querySelector('.js-slider-current-slide');
+  const totalCountEl = document.querySelector('.js-slider-total-slides');
+
+  if (totalCountEl) {
+    totalCountEl.textContent = (slides.length < 10 ? '0' : '') + slides.length;
+  }
+
+  slides.forEach((slide, idx) => {
+    slide.style.position = 'absolute';
+    slide.style.top = '0';
+    slide.style.left = '0';
+    slide.style.width = '100%';
+    slide.style.height = '100%';
+    slide.style.transition = 'opacity 1s ease-in-out, visibility 1s ease-in-out';
+    slide.style.opacity = idx === 0 ? '1' : '0';
+    slide.style.zIndex = idx === 0 ? '2' : '1';
+    slide.style.visibility = idx === 0 ? 'visible' : 'hidden';
+    slide.style.pointerEvents = idx === 0 ? 'auto' : 'none';
   });
 
-  function handleLoaded(img) {
-    const parent = img.closest('.lazy-image');
-    if (parent) {
-      parent.classList.add('is-loaded');
-      const placeholder = parent.querySelector('.placeholder');
-      if (placeholder) {
-        placeholder.style.opacity = '0';
-        setTimeout(() => {
-          placeholder.style.display = 'none';
-        }, 300);
-      }
+  function updateCounter() {
+    if (currCountEl) {
+      currCountEl.textContent = (currentIndex + 1 < 10 ? '0' : '') + (currentIndex + 1);
     }
-    img.style.opacity = '1';
   }
+
+  function showSlide(index) {
+    slides[currentIndex].style.opacity = '0';
+    slides[currentIndex].style.visibility = 'hidden';
+    slides[currentIndex].style.zIndex = '1';
+    slides[currentIndex].style.pointerEvents = 'none';
+
+    currentIndex = (index + slides.length) % slides.length;
+
+    slides[currentIndex].style.visibility = 'visible';
+    slides[currentIndex].style.opacity = '1';
+    slides[currentIndex].style.zIndex = '2';
+    slides[currentIndex].style.pointerEvents = 'auto';
+
+    const img = slides[currentIndex].querySelector('img');
+    if (img && img.getAttribute('data-src') && (!img.src || img.src.includes('data:image'))) {
+      img.src = img.getAttribute('data-src');
+    }
+
+    updateCounter();
+  }
+
+  function nextSlide() {
+    showSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentIndex - 1);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    timer = setInterval(nextSlide, delay);
+  }
+
+  function stopAutoplay() {
+    if (timer) clearInterval(timer);
+  }
+
+  // Cover Arrows
+  const prevBtns = document.querySelectorAll('.js-slider-prev');
+  const nextBtns = document.querySelectorAll('.js-slider-next');
+
+  prevBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+      startAutoplay();
+    });
+  });
+
+  nextBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+      startAutoplay();
+    });
+  });
+
+  slider.addEventListener('mouseenter', stopAutoplay);
+  slider.addEventListener('mouseleave', startAutoplay);
+
+  // Touch Swipe for mobile
+  let startX = 0;
+  slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    stopAutoplay();
+  }, { passive: true });
+
+  slider.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+    startAutoplay();
+  }, { passive: true });
+
+  updateCounter();
+  startAutoplay();
 }
 
 /* ==========================================================================
@@ -87,113 +172,7 @@ function initMobileMenu() {
 }
 
 /* ==========================================================================
-   3. Fullscreen Hero Slider
-   ========================================================================== */
-function initSlider() {
-  const slider = document.querySelector('.slider.js-slider');
-  if (!slider) return;
-
-  const slides = slider.querySelectorAll('.slide.js-slide');
-  if (slides.length === 0) return;
-
-  let currentIndex = 0;
-  const delay = parseInt(slider.getAttribute('data-delay') || '5000', 10);
-  let timer = null;
-
-  slides.forEach((slide, idx) => {
-    slide.style.position = 'absolute';
-    slide.style.top = '0';
-    slide.style.left = '0';
-    slide.style.width = '100%';
-    slide.style.height = '100%';
-    slide.style.transition = 'opacity 1s ease-in-out, visibility 1s ease-in-out';
-    slide.style.opacity = idx === 0 ? '1' : '0';
-    slide.style.zIndex = idx === 0 ? '2' : '1';
-    slide.style.visibility = idx === 0 ? 'visible' : 'hidden';
-    slide.style.pointerEvents = idx === 0 ? 'auto' : 'none';
-  });
-
-  function showSlide(index) {
-    slides[currentIndex].style.opacity = '0';
-    slides[currentIndex].style.visibility = 'hidden';
-    slides[currentIndex].style.zIndex = '1';
-    slides[currentIndex].style.pointerEvents = 'none';
-
-    currentIndex = (index + slides.length) % slides.length;
-
-    slides[currentIndex].style.visibility = 'visible';
-    slides[currentIndex].style.opacity = '1';
-    slides[currentIndex].style.zIndex = '2';
-    slides[currentIndex].style.pointerEvents = 'auto';
-
-    const img = slides[currentIndex].querySelector('img');
-    if (img && img.getAttribute('data-src') && (!img.src || img.src.includes('data:image'))) {
-      img.src = img.getAttribute('data-src');
-    }
-  }
-
-  function nextSlide() {
-    showSlide(currentIndex + 1);
-  }
-
-  function prevSlide() {
-    showSlide(currentIndex - 1);
-  }
-
-  function startAutoplay() {
-    stopAutoplay();
-    timer = setInterval(nextSlide, delay);
-  }
-
-  function stopAutoplay() {
-    if (timer) clearInterval(timer);
-  }
-
-  // Prev / Next arrow buttons
-  const prevBtn = document.querySelector('.js-slider-prev');
-  const nextBtn = document.querySelector('.js-slider-next');
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      prevSlide();
-      startAutoplay();
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      nextSlide();
-      startAutoplay();
-    });
-  }
-
-  slider.addEventListener('mouseenter', stopAutoplay);
-  slider.addEventListener('mouseleave', startAutoplay);
-
-  // Touch Swipe for mobile
-  let startX = 0;
-  slider.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    stopAutoplay();
-  }, { passive: true });
-
-  slider.addEventListener('touchend', (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = startX - endX;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
-    startAutoplay();
-  }, { passive: true });
-
-  startAutoplay();
-}
-
-/* ==========================================================================
-   4. FAQ Accordion (Answers Expand / Collapse)
+   3. FAQ Accordion (Answers Expand / Collapse)
    ========================================================================== */
 function initFAQ() {
   const questions = document.querySelectorAll('.questions-list-section .question, .js-question');
@@ -203,12 +182,10 @@ function initFAQ() {
     const answer = question.querySelector('.answer, .js-answer');
     if (!title || !answer) return;
 
-    // Toggle on click
     title.addEventListener('click', (e) => {
       e.preventDefault();
       const isActive = question.classList.contains('is-active');
 
-      // Optional: Close others
       questions.forEach(q => {
         if (q !== question) {
           q.classList.remove('is-active');
@@ -230,7 +207,7 @@ function initFAQ() {
 }
 
 /* ==========================================================================
-   5. Order Modal ("Замовити фотосесію")
+   4. Order Modal ("Замовити фотосесію")
    ========================================================================== */
 function initOrderModal() {
   const orderTriggers = document.querySelectorAll('.js-order-trigger, .button.-fill, a[href*="forms/orders"]');
@@ -291,7 +268,7 @@ function initOrderModal() {
 }
 
 /* ==========================================================================
-   6. Floating Action Buttons (Back to Top & Share)
+   5. Floating Action Buttons (Back to Top & Share)
    ========================================================================== */
 function initFloatingButtons() {
   const backToTop = document.querySelector('.js-back-to-top');
@@ -319,7 +296,6 @@ function initFloatingButtons() {
           url: window.location.href
         }).catch(() => {});
       } else {
-        // Copy to clipboard
         navigator.clipboard.writeText(window.location.href).then(() => {
           showToast('Посилання скопійовано в буфер!');
         }).catch(() => {
@@ -345,7 +321,7 @@ function initFloatingButtons() {
 }
 
 /* ==========================================================================
-   7. Fullscreen Lightbox Gallery (Photoswipe equivalent)
+   6. Fullscreen Lightbox Gallery (Photoswipe equivalent)
    ========================================================================== */
 function initGalleryLightbox() {
   const galleryLinks = document.querySelectorAll('.js-gallery-link');
@@ -466,7 +442,7 @@ function initGalleryLightbox() {
 }
 
 /* ==========================================================================
-   8. Highlight Active Menu Link
+   7. Highlight Active Menu Link
    ========================================================================== */
 function highlightActiveMenu() {
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
