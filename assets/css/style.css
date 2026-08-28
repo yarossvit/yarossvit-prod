@@ -1,5 +1,83 @@
 
 /* ==========================================================================
+   BULLETPROOF AVATAR & HANDWRITTEN NOTE SIZING (MATCHING ORIGINAL WFOLIO)
+   ========================================================================== */
+
+/* 1. Volodymyr Avatar (360px) */
+#section-5048964 {
+  display: block !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+.avatar-round-container {
+  width: 360px !important;
+  height: 360px !important;
+  max-width: 100% !important;
+  border-radius: 50% !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08) !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.avatar-round-container img,
+#section-5048964 img {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+@media (max-width: 768px) {
+  .avatar-round-container {
+    width: 240px !important;
+    height: 240px !important;
+  }
+}
+
+/* 2. Handwritten Note (1000px width, natural height, NEVER collapsed) */
+#section-5109910 {
+  display: block !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 10px 0 20px 0 !important;
+  width: 100% !important;
+}
+
+.handwritten-note-container {
+  width: 100% !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  display: block !important;
+  position: relative !important;
+}
+
+.handwritten-note-container img,
+#section-5109910 img {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  max-width: 1000px !important;
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+
+/* ==========================================================================
    EXACT ORIGINAL HOMEPAGE SECTIONS (380PX AVATAR, 1150PX HANDWRITTEN NOTE)
    ========================================================================== */
 
