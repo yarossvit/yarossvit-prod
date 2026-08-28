@@ -4,6 +4,100 @@
    ========================================================================== */
 
 /* Section paddings */
+.sections-container.-theme-pad-before { padding-top: 40px !important; }
+.sections-container.-theme-pad-after  { padding-bottom: 30px !important; }
+.sections-container.-large-pad-before { padding-top: 40px !important; }
+.sections-container.-large-pad-after  { padding-bottom: 40px !important; }
+.sections-container.-medium-pad-before { padding-top: 30px !important; }
+.sections-container.-medium-pad-after  { padding-bottom: 30px !important; }
+.sections-container.-small-pad-before { padding-top: 15px !important; }
+.sections-container.-small-pad-after  { padding-bottom: 25px !important; }
+.sections-container.-no-pad-before    { padding-top: 0 !important; }
+.sections-container.-no-pad-after     { padding-bottom: 0 !important; }
+
+/* 1. Volodymyr Avatar (Exact original 360px large circle) */
+#section-5048964,
+.picture-section.-round {
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+#section-5048964 .avatar-wrapper,
+.picture-section.-round .avatar-wrapper,
+.picture-section.-round .lazy-image {
+  width: 360px !important;
+  height: 360px !important;
+  max-width: 100% !important;
+  border-radius: 50% !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07) !important;
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  #section-5048964 .avatar-wrapper,
+  .picture-section.-round .avatar-wrapper,
+  .picture-section.-round .lazy-image {
+    width: 240px !important;
+    height: 240px !important;
+  }
+}
+
+#section-5048964 .avatar-wrapper img,
+.picture-section.-round img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* 2. Handwritten Note (Exact original 960px large banner) */
+#section-5109910 {
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+#section-5109910 .note-wrapper {
+  max-width: 960px !important;
+  width: 95% !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+#section-5109910 .note-wrapper img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* 3. Divider Dots */
+.divider-section.-dots {
+  text-align: center !important;
+  margin: 30px 0 !important;
+}
+
+.divider-section.-dots > .label {
+  display: inline-block !important;
+  font-size: 22px !important;
+  letter-spacing: 14px !important;
+  color: #9e9e9e !important;
+  line-height: 1 !important;
+}
+
+.divider-section.-dots > .label::after {
+  content: "•   •   •" !important;
+}
+
+
+/* ==========================================================================
+   HOMEPAGE PRECISION SECTIONS (AVATAR, HANDWRITTEN NOTE, DIVIDERS)
+   ========================================================================== */
+
+/* Section paddings */
 .sections-container.-theme-pad-before { padding-top: 50px !important; }
 .sections-container.-theme-pad-after  { padding-bottom: 50px !important; }
 .sections-container.-large-pad-before { padding-top: 40px !important; }
