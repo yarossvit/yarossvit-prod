@@ -1,5 +1,101 @@
 
 /* ==========================================================================
+   EXACT ORIGINAL HOMEPAGE SECTIONS (380PX AVATAR, 1150PX HANDWRITTEN NOTE)
+   ========================================================================== */
+
+/* 1. Medium-width container */
+.sections-container.-medium-width .sections-container-inner {
+  width: 1200px !important;
+  max-width: calc(100% - 50px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+
+/* 2. Volodymyr Avatar (Exact original 380px circle filling col-md-4) */
+#section-5048964,
+.picture-section.-round {
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+.avatar-round-container,
+#section-5048964 .avatar-round-container,
+#section-5048964 .lazy-image {
+  width: 380px !important;
+  height: 380px !important;
+  max-width: 100% !important;
+  border-radius: 50% !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  display: block !important;
+  aspect-ratio: 1 / 1 !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+.avatar-round-container img,
+#section-5048964 img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  .avatar-round-container,
+  #section-5048964 .avatar-round-container {
+    width: 260px !important;
+    height: 260px !important;
+  }
+}
+
+/* 3. Handwritten Note (Full width 1150px spanning the container) */
+#section-5109910 {
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.note-full-container,
+#section-5109910 .note-full-container,
+#section-5109910 .lazy-image {
+  width: 100% !important;
+  max-width: 1150px !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.note-full-container img,
+#section-5109910 img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* 4. Dots Divider */
+.divider-section.-dots {
+  text-align: center !important;
+  margin: 35px 0 !important;
+}
+
+.divider-section.-dots > .label {
+  display: inline-block !important;
+  font-size: 24px !important;
+  letter-spacing: 16px !important;
+  color: #a8a8a8 !important;
+  line-height: 1 !important;
+}
+
+.divider-section.-dots > .label::after {
+  content: "•   •   •" !important;
+}
+
+
+/* ==========================================================================
    HOMEPAGE PRECISION SECTIONS (AVATAR, HANDWRITTEN NOTE, DIVIDERS)
    ========================================================================== */
 
