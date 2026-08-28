@@ -1,5 +1,268 @@
 
 /* ==========================================================================
+   ANNOUNCEMENTS (STORIES LIST - announcements.html)
+   ========================================================================== */
+.post-list,
+.post-list.-rows,
+.post-list.-announcement-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.post-list .post {
+  display: block !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+.post-list .post-inner {
+  display: block !important;
+  width: 100% !important;
+}
+
+.post-list .post-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 40px !important;
+  width: 100% !important;
+}
+
+.post-list .post-miniature {
+  flex: 0 0 320px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  display: block !important;
+  text-decoration: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.post-list .post-miniature .lazy-image {
+  aspect-ratio: 2 / 3 !important;
+  width: 100% !important;
+  height: auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: block !important;
+  background-color: #f4f4f4 !important;
+}
+
+.post-list .post-miniature .lazy-image > img,
+.post-list .post-miniature img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: transform 0.4s ease !important;
+}
+
+.post-list .post-miniature:hover .lazy-image > img,
+.post-list .post-miniature:hover img {
+  transform: scale(1.04) !important;
+}
+
+.post-list .post-caption {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+}
+
+.post-list .post-date {
+  font-size: 14px !important;
+  color: #888888 !important;
+  margin-bottom: 8px !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+}
+
+.post-list h4,
+.post-list .post-title {
+  font-family: 'Forum', serif !important;
+  font-size: 28px !important;
+  color: #1e1e1e !important;
+  margin: 0 0 15px 0 !important;
+  text-decoration: none !important;
+}
+
+.post-list .post-title a,
+.post-list a.post-title {
+  color: #1e1e1e !important;
+  text-decoration: none !important;
+}
+
+.post-list .post-title:hover,
+.post-list .post-title a:hover {
+  text-decoration: underline !important;
+}
+
+.post-list .post-arrow {
+  display: inline-block !important;
+  color: #1e1e1e !important;
+  text-decoration: none !important;
+}
+
+.post-list .post-arrow .arrow {
+  display: inline-block !important;
+  position: relative !important;
+  width: 40px !important;
+  height: 1px !important;
+  background-color: #1e1e1e !important;
+  transition: width 0.3s ease !important;
+  vertical-align: middle !important;
+}
+
+.post-list .post-arrow .arrow::after,
+.post-list .post-arrow .arrow::before {
+  content: "" !important;
+  position: absolute !important;
+  width: 6px !important;
+  height: 1px !important;
+  background-color: #1e1e1e !important;
+}
+
+.post-list .post-arrow .arrow::after {
+  right: 0 !important;
+  top: -2px !important;
+  transform: rotate(45deg) !important;
+}
+
+.post-list .post-arrow .arrow::before {
+  right: 0 !important;
+  top: 2px !important;
+  transform: rotate(-45deg) !important;
+}
+
+.post-list .post-container:hover .post-arrow .arrow {
+  width: 55px !important;
+}
+
+@media (max-width: 768px) {
+  .post-list .post-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .post-list .post-miniature {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ==========================================================================
+   STORYBOARD GALLERIES (valeriya-1.html, client albums)
+   ========================================================================== */
+.picture-set-section.-storyboard,
+.album-storyboard {
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin: -10px !important;
+  width: calc(100% + 20px) !important;
+  justify-content: flex-start !important;
+  line-height: normal !important;
+}
+
+.picture-set-section.-storyboard > .piece,
+.album-storyboard > .piece {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  box-sizing: border-box !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+/* 2-columns mode (like valeriya-1 storyboard) */
+.picture-set-section.-storyboard[data-columns="1-2"] > .piece,
+.album-storyboard[data-columns="1-2"] > .piece,
+.picture-set-section.-storyboard > .piece {
+  width: 50% !important;
+}
+
+/* 3-columns mode (like client albums) */
+.album-storyboard[data-columns="2-3"] > .piece {
+  width: 33.333333% !important;
+}
+
+@media (max-width: 900px) {
+  .album-storyboard[data-columns="2-3"] > .piece {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .picture-set-section.-storyboard[data-columns="1-2"] > .piece,
+  .album-storyboard[data-columns="1-2"] > .piece,
+  .picture-set-section.-storyboard > .piece,
+  .album-storyboard[data-columns="2-3"] > .piece {
+    width: 100% !important;
+  }
+}
+
+.picture-set-section.-storyboard .piece .inner,
+.album-storyboard .piece .inner {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.picture-set-section.-storyboard .piece .link,
+.album-storyboard .piece .link {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-decoration: none !important;
+  cursor: zoom-in !important;
+}
+
+.picture-set-section.-storyboard .piece .lazy-image,
+.album-storyboard .piece .lazy-image {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  line-height: 0 !important;
+}
+
+.picture-set-section.-storyboard .piece .lazy-image > img,
+.picture-set-section.-storyboard .piece img,
+.album-storyboard .piece .lazy-image > img,
+.album-storyboard .piece img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: transform 0.3s ease !important;
+}
+
+.picture-set-section.-storyboard .piece .link:hover img,
+.album-storyboard .piece .link:hover img {
+  transform: scale(1.02) !important;
+}
+
+
+/* ==========================================================================
    ALBUM LISTINGS & COVERS (Family, Love Story, Portrait, Wedding, Stories)
    ========================================================================== */
 .listing {
