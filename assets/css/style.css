@@ -1,5 +1,167 @@
 
 /* ==========================================================================
+   PERFECT NORMAL-FLOW PIECE & GALLERY LAYOUT (NO OVERLAPPING)
+   ========================================================================== */
+
+/* 1. Reset all pieces to normal block/flex flow */
+.piece {
+  position: relative !important;
+  display: block !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.piece .inner,
+.piece .link {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.piece .lazy-image {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  line-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* All piece photos must take their natural height */
+.piece .lazy-image > img,
+.piece .lazy-image img,
+.piece img {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* 2. Storyboard galleries (valeriya-1.html) */
+.picture-set-section.-storyboard,
+.album-storyboard {
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin: -8px !important;
+  width: calc(100% + 16px) !important;
+  justify-content: flex-start !important;
+}
+
+.picture-set-section.-storyboard > .piece,
+.picture-set-section.-storyboard[data-columns="1-2"] > .piece {
+  width: 50% !important;
+  padding: 8px !important;
+  float: none !important;
+}
+
+.album-storyboard[data-columns="2-3"] > .piece {
+  width: 33.333333% !important;
+  padding: 8px !important;
+  float: none !important;
+}
+
+@media (max-width: 800px) {
+  .album-storyboard[data-columns="2-3"] > .piece {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 550px) {
+  .picture-set-section.-storyboard > .piece,
+  .picture-set-section.-storyboard[data-columns="1-2"] > .piece,
+  .album-storyboard[data-columns="2-3"] > .piece {
+    width: 100% !important;
+  }
+}
+
+/* 3. Announcements List (announcements.html) */
+.post-list,
+.post-list.-rows {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+  width: 100% !important;
+}
+
+.post-list .post {
+  display: block !important;
+  width: 100% !important;
+}
+
+.post-list .post-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 40px !important;
+  width: 100% !important;
+}
+
+.post-list .post-miniature {
+  flex: 0 0 320px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  display: block !important;
+  text-decoration: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.post-list .post-miniature .lazy-image {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+.post-list .post-miniature .lazy-image > img,
+.post-list .post-miniature img {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: transform 0.4s ease !important;
+}
+
+.post-list .post-miniature:hover img {
+  transform: scale(1.04) !important;
+}
+
+@media (max-width: 768px) {
+  .post-list .post-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .post-list .post-miniature {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+
+/* ==========================================================================
    ANNOUNCEMENTS (STORIES LIST - announcements.html)
    ========================================================================== */
 .post-list,
